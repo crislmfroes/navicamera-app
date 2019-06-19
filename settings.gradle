@@ -1,1 +1,1 @@
-include ':app', ':opencv4'
+include ':app'

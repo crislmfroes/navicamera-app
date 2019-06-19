@@ -14,9 +14,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.otaliastudios.cameraview.Audio
 import com.otaliastudios.cameraview.CameraView
 import kotlinx.android.synthetic.main.main_fragment.*
-import org.opencv.core.CvType
-import org.opencv.core.Mat
-import org.opencv.imgproc.Imgproc
 
 class MainFragment : Fragment() {
 
@@ -64,13 +61,7 @@ class MainFragment : Fragment() {
         cameraView.audio = Audio.OFF
         cameraView.setLifecycleOwner(this)
         cameraView.addFrameProcessor {
-            it.freeze()
-            val mat = Mat(it.size.width, it.size.height, CvType.CV_8UC3)
-            val yuv = Mat(it.size.height+it.size.height/2, it.size.width, CvType.CV_8UC1)
-            yuv.put(0, 0, it.data)
-            Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2BGR_NV21)
-            viewModel.processImage(mat)
-            it.release()
+            viewModel.processImage(it)
         }
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {

@@ -2,7 +2,6 @@ package com.crislmfroes.navicamera.ui.main
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -12,9 +11,10 @@ import com.crislmfroes.navicamera.model.Marcador
 import com.crislmfroes.navicamera.model.MarcadorDatabaseRoom
 import com.crislmfroes.navicamera.model.MarcadorRemote
 import com.crislmfroes.navicamera.model.MarcadorRepository
-import kotlinx.coroutines.GlobalScope
+import com.otaliastudios.cameraview.Frame
 import kotlinx.coroutines.launch
-import org.opencv.android.OpenCVLoader
+import org.bytedeco.javacpp.Loader
+import org.bytedeco.opencv.opencv_java
 import org.opencv.android.Utils
 import org.opencv.aruco.Aruco
 import org.opencv.aruco.CharucoBoard
@@ -22,11 +22,10 @@ import org.opencv.aruco.DetectorParameters
 import org.opencv.aruco.Dictionary
 import org.opencv.calib3d.Calib3d
 import org.opencv.core.*
+import org.opencv.imgproc.Imgproc
 import java.io.File
 import java.io.FileNotFoundException
-import kotlin.math.sin
 import kotlin.math.sinh
-import kotlin.math.sqrt
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "MainViewModel"
@@ -47,18 +46,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val marcadores = MutableLiveData<List<Marcador>>()
 
     init {
-        if (OpenCVLoader.initDebug()) {
-            Log.i(TAG, "OpenCv carregada com sucesso!")
-        } else {
-            Log.i(TAG, "Falha ao carregar OpenCv!")
-        }
+        Loader.load(opencv_java::class.java)
         val marcadorDao = MarcadorDatabaseRoom.getDatabase(application, viewModelScope).marcadorDao()
         val marcadorRemote = MarcadorRemote()
         marcadorRepository = MarcadorRepository(marcadorDao, marcadorRemote)
         detectorParameters = DetectorParameters.create()
         populateRoomDatabase()
         markerDict = loadDictionary("dictByteList.json")
-        board = CharucoBoard.create(10, 10, 0.2f, 0.16f, markerDict)
+        board = CharucoBoard.create(10, 10, 0.02f, 0.016f, markerDict)
         loadCameraParameters()
     }
 
@@ -107,7 +102,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun processImage(mat : Mat) {
+    fun processImage(frame : Frame) {
+        val mat = Mat(frame.size.width, frame.size.height, CvType.CV_8UC3)
+        val yuv = Mat(frame.size.height+frame.size.height/2, frame.size.width, CvType.CV_8UC1)
+        yuv.put(0, 0, frame.data)
+        Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2BGR_NV21)
         Core.rotate(mat, mat, Core.ROTATE_90_CLOCKWISE)
         val marcadorList = mutableListOf<Marcador>()
         isProcessing = true
@@ -123,7 +122,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (corners.size > 0) {
                 val rvecs = Mat()
                 val tvecs = Mat()
-                Aruco.estimatePoseSingleMarkers(corners, 0.16f, cameraMatrix, distCoeffs, rvecs, tvecs)
+                Aruco.estimatePoseSingleMarkers(corners, 0.2f, cameraMatrix, distCoeffs, rvecs, tvecs)
                 for (j in 0 until ids.total()) {
                     val rmat = Mat(3, 1, CvType.CV_32FC1)
                     val rdata = DoubleArray(3)
@@ -134,12 +133,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     tvecs.get(0, j.toInt(), tdata)
                     tmat.put(0, 0, *tdata)
                     Calib3d.drawFrameAxes(mat, cameraMatrix, distCoeffs, rmat, tmat, 0.2f)
-                    val id = ids[0, j.toInt()][0].toInt()
+                    val id = ids[j.toInt(), 0][0].toInt()
                     val marcador = marcadorRepository.get(id + 1)
                     marcador?.let {
                         val distancia = Core.norm(tmat)
                         val x = tdata[0]
-                        val angle = sinh(x/distancia)
+                        val y = tdata[1]
+                        //val distancia = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0))
+                        val angle = (sinh(x/distancia))*180/Math.PI
                         it.rotacao = angle.toFloat()
                         it.distancia = distancia.toFloat()
                         marcadorList.add(it)

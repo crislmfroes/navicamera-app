@@ -16,10 +16,10 @@ class MarcadorAdapter(private val marcadores : List<Marcador>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: MarcadorHolder, position: Int) {
-        holder.layout.codText.text = marcadores[position].cod.toString()
+        holder.layout.codText.text = "#%d".format(marcadores[position].cod)
         holder.layout.nomeText.text = marcadores[position].nome
-        holder.layout.distText.text = marcadores[position].distancia.toString()
-        holder.layout.angleText.text = marcadores[position].rotacao.toString()
+        holder.layout.distText.text = "%.2f metros".format(marcadores[position].distancia)
+        holder.layout.angleText.text = "%.2f graus".format(marcadores[position].rotacao)
     }
 
     override fun getItemCount(): Int {
