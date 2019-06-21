@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface MarcadorDao {
     @Query("SELECT * FROM marcador_table ORDER BY cod ASC")
-    fun getAllMarcadores() : LiveData<List<Marcador>>
+    suspend fun getAllMarcadores() : List<Marcador>
 
     @Query("SELECT * FROM marcador_table WHERE cod = :cod")
     fun getMarcador(cod : Int) : Marcador?

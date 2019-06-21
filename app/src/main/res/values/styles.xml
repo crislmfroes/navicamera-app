@@ -15,6 +15,7 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <!--
     <style name="CardTheme.Nearest" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/primaryDarkColor</item>
     </style>
@@ -23,5 +24,9 @@
     </style>
     <style name="CardTheme.Gone" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/primaryLightColor</item>
+    </style>
+    -->
+    <style name="AppTheme.ProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressTint">@color/primaryColor</item>
     </style>
 </resources>

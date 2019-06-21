@@ -1,20 +1,37 @@
 package com.crislmfroes.navicamera.model
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import java.io.IOException
+import androidx.lifecycle.MutableLiveData
 
-class MarcadorRepository(private val marcadorDao: MarcadorDao, private val marcadorRemote: MarcadorRemote) {
-    val allMarcadoresRoom = marcadorDao.getAllMarcadores()
-    val allMarcadoresRemote = marcadorRemote.getAllMarcadores()
+class MarcadorRepository(private val marcadorDao: MarcadorDao, private val marcadorRemote: MarcadorRemote, private val dicionarioDao: DicionarioDao) {
+
+    private val TAG = "MarcadorRepository"
 
     @WorkerThread
-    suspend fun insert(marcador : Marcador) {
+    suspend fun insertMarcador(marcador : Marcador) {
+        Log.i(TAG, "Inserindo marcador ...")
         marcadorDao.insert(marcador)
     }
 
-    fun get(cod : Int) : Marcador? {
-        return marcadorDao.getMarcador(cod)
+    @WorkerThread
+    suspend fun insertDicionario(dicionario: Dicionario) {
+        dicionarioDao.insert(dicionario)
+    }
+
+    @WorkerThread
+    suspend fun getAllMarcador() : List<Marcador> {
+        return marcadorDao.getAllMarcadores()
+    }
+
+    fun getAllMarcadorRemote() : MutableLiveData<List<Marcador>> {
+        return marcadorRemote.getAllMarcadores()
+    }
+
+    @WorkerThread
+    suspend fun getFirstDicionario() : Dicionario? {
+        return dicionarioDao.getFirst()
     }
 
 }
