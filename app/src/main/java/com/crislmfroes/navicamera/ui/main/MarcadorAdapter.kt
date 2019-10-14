@@ -21,10 +21,10 @@ class MarcadorAdapter(private val marcadores : List<Marcador>) : RecyclerView.Ad
         } else {
             holder.layout.cardview.setCardBackgroundColor(holder.itemView.resources.getColor(R.color.primaryColor))
         }
-        holder.layout.codText.text = "#%d".format(marcadores[position].cod)
+        //holder.layout.codText.text = "#%d".format(marcadores[position].cod)
         holder.layout.nomeText.text = marcadores[position].nome
         holder.layout.distText.text = "%.2f metros".format(marcadores[position].distancia)
-        holder.layout.angleText.text = "%.2f graus".format(marcadores[position].rotacao)
+        //holder.layout.angleText.text = "%.2f graus".format(marcadores[position].rotacao)
     }
 
     override fun getItemCount(): Int {

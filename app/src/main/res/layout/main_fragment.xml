@@ -81,6 +81,7 @@
             android:layout_margin="@dimen/fab_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:contentDescription="@string/ir_para_o_modo_de_visualiza_ao"
             app:srcCompat="@drawable/ic_remove_red_eye_white_96dp"/>
 <!--
     <TextView

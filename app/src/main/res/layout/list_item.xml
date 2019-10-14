@@ -6,12 +6,12 @@
                                                        android:layout_height="match_parent"
                                                        style="@style/Widget.MaterialComponents.CardView"
                                                        android:layout_margin="10dp"
-                                                       android:importantForAccessibility="yes"
                                                        android:id="@+id/cardview"
+                                                       android:importantForAccessibility="yes"
     >
         <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
                                                            android:layout_height="match_parent">
-            <TextView android:layout_width="wrap_content"
+            <!--TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="#0"
                       android:id="@+id/codText"
@@ -19,14 +19,14 @@
                       android:textSize="20sp"
                       app:layout_constraintTop_toTopOf="parent"
                       app:layout_constraintLeft_toLeftOf="parent"
-            />
+            /-->
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="Bolo"
                       android:id="@+id/nomeText"
                       android:textSize="20sp"
-                      app:layout_constraintBottom_toBottomOf="parent"
+                      app:layout_constraintTop_toTopOf="parent"
                       app:layout_constraintLeft_toLeftOf="parent"
             />
 
@@ -39,14 +39,14 @@
                       app:layout_constraintRight_toRightOf="parent"
             />
 
-            <TextView android:layout_width="wrap_content"
+            <!--TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:text="45 graus"
                       android:id="@+id/angleText"
                       android:textSize="20sp"
                       app:layout_constraintBottom_toBottomOf="parent"
                       app:layout_constraintRight_toRightOf="parent"
-            />
+            /-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

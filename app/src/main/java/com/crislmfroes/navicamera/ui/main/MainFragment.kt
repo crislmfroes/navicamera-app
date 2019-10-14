@@ -1,5 +1,6 @@
 package com.crislmfroes.navicamera.ui.main
 
+import android.content.res.Resources
 import android.graphics.*
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -104,10 +105,12 @@ class MainFragment : Fragment(), CameraBridgeViewBase.CvCameraViewListener2 {
                 //overlay.visibility = View.VISIBLE
                 //cameraView.visibility = View.VISIBLE
                 recyclerview.visibility = View.GONE
+                fab.contentDescription = getString(R.string.sair_do_modo_de_visualiza_ao)
             } else {
                 //overlay.visibility = View.GONE
                 //cameraView.visibility = View.INVISIBLE
                 recyclerview.visibility = View.VISIBLE
+                fab.contentDescription = getString(R.string.ir_para_o_modo_de_visualiza_ao)
             }
         }
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerview)

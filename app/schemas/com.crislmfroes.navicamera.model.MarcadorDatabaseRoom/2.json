@@ -1,0 +1,126 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "7ac1fe4c10903ec109be3cdc6104b2be",
+    "entities": [
+      {
+        "tableName": "marcador_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`x` REAL NOT NULL, `y` REAL NOT NULL, `z` REAL NOT NULL, `distancia` REAL NOT NULL, `rotacao` REAL NOT NULL, `distThresh` REAL NOT NULL, `nome` TEXT NOT NULL, `descricao` TEXT NOT NULL, `cod` INTEGER NOT NULL, PRIMARY KEY(`cod`))",
+        "fields": [
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "z",
+            "columnName": "z",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distancia",
+            "columnName": "distancia",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rotacao",
+            "columnName": "rotacao",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "distThresh",
+            "columnName": "distThresh",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nome",
+            "columnName": "nome",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "descricao",
+            "columnName": "descricao",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cod",
+            "columnName": "cod",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cod"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "dicionario_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cod` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `markerSize` INTEGER NOT NULL, `nMarkers` INTEGER NOT NULL, `maxCorrectionBits` INTEGER NOT NULL, `bytesList` BLOB NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "cod",
+            "columnName": "cod",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "markerSize",
+            "columnName": "markerSize",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nMarkers",
+            "columnName": "nMarkers",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxCorretionBits",
+            "columnName": "maxCorrectionBits",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "bytesList",
+            "columnName": "bytesList",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cod"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7ac1fe4c10903ec109be3cdc6104b2be\")"
+    ]
+  }
+}

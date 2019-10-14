@@ -37,10 +37,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //val overlay : MutableLiveData<Bitmap> = MutableLiveData()
     private val marcadorRepository : MarcadorRepository
     val marcadores = MutableLiveData<List<Marcador>>()
+    val marcadorList = mutableListOf<Marcador>()
+    private var previousMarcadorList = listOf<Marcador>()
     private var allMarcadores : List<Marcador>? = listOf()
     val loading = MutableLiveData<Boolean>(false)
     val loadingMsg = MutableLiveData<String>()
     val loadingProgress = MutableLiveData<Int>()
+    private var frames = 0
 
     init {
         val database = MarcadorDatabaseRoom.getDatabase(application, viewModelScope)
@@ -139,7 +142,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             yuv.put(0, 0, frame.data)
             Imgproc.cvtColor(yuv, mat, Imgproc.COLOR_YUV2BGR_NV21)
             Core.rotate(mat, mat, Core.ROTATE_90_CLOCKWISE)*/
-            val marcadorList = mutableListOf<Marcador>()
+            //val marcadorList = marcadores.value as MutableList<Marcador>
             isProcessing = true
             if (!isCalibrated) {
                 calibrateCamera(rgb)
@@ -169,13 +172,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                             for (marcador in it) {
                                 if (marcador.cod == id + 1) {
                                     val distancia = Core.norm(tmat)
-                                    val x = tdata[0]
-                                    val y = tdata[1]
-                                    //val distancia = Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0))
-                                    val angle = (sinh(x/distancia))*180/Math.PI
-                                    marcador.rotacao = angle.toFloat()
-                                    marcador.distancia = distancia.toFloat()
-                                    marcadorList.add(marcador)
+                                    marcador.x = tdata[0]
+                                    marcador.y = tdata[1]
+                                    marcador.z = tdata[2]
+                                    marcador.distancia = distancia
+                                    val angle = (sinh(marcador.x/distancia))*180/Math.PI
+                                    marcador.rotacao = angle
+                                    //marcador.distancia = distancia.toFloat()
+                                    if (!marcadorList.contains(marcador)) {
+                                        marcadorList.add(marcador)
+                                    }
                                     break
                                 }
                             }
@@ -195,7 +201,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             marcadorList.sortBy {
                 it.distancia
             }
-            marcadores.postValue(marcadorList)
+            if (frames % 100 == 0) {
+                marcadores.postValue(marcadorList)
+                previousMarcadorList = marcadorList
+                frames = 0
+            } else {
+                frames += 1
+            }
         }
         Imgproc.cvtColor(rgb, mat, Imgproc.COLOR_BGR2RGBA)
         return mat

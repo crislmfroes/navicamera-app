@@ -24,7 +24,7 @@ class MarcadorRemote {
                 .build()
             val response = client.newCall(request).execute()
             //Log.i(TAG, "Response: %s".format(response.body!!.string()))
-            marcadores = Klaxon().parseArray(response.body!!.byteStream())!!
+            marcadores = Klaxon().parseArray(response.body().byteStream())!!
             /*for (json in jsonArray!!) {
                 val marcador = Marcador(
                     nome = json["nome"] as String,
